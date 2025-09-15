@@ -3,20 +3,57 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Redirecting...</title>
+  <title>DIF App</title>
+
+  <!-- Manifest -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#000000">
+
+  <!-- Icons -->
+  <link rel="icon" href="/icons/icon-192x192.png">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: #f7f7f7;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
 </head>
 <body>
-  <h2>Redirecting to PHP App...</h2>
+  <h2>Welcome to DIF Attendance System - PWA</h2>
+  <p>You can install this app from your browser menu.</p>
+
+  <!-- Manual Redirect Button -->
+  <button onclick="goToApp()">Open My App</button>
 
   <script>
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/service-worker.js")
         .then(() => console.log("✅ Service Worker Registered"));
     }
-    // 🔗 Redirect user to InfinityFree backend
-    window.location.href = "https://attendance.great-site.net/DIF%20Attendence%20System/index.php";
+
+    function goToApp() {
+      window.location.href = "/index.php";
+    }
   </script>
 </body>
 </html>
