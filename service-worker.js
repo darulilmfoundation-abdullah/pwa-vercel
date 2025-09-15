@@ -1,20 +1,36 @@
-self.addEventListener('install', function(event) {
+const CACHE_NAME = 'pwa-shell-v2';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/manifest.json'
+];
+
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open('dif-attendance-cache-v1').then(function(cache) {
-      return cache.addAll([
-        '/',
-        '/index.php',
-        '/assets/css/admin.css',
-        '/assets/images/dif_logo.png'
-      ]);
-    })
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+      .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.map(key => {
+        if (key !== CACHE_NAME) return caches.delete(key);
+      }))
+    ).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  // only GET requests
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request).then(function(response) {
-      return response || fetch(event.request);
+    caches.match(event.request).then(cachedResp => {
+      if (cachedResp) return cachedResp;
+      return fetch(event.request).catch(() => caches.match('/index.html'));
     })
   );
 });
