@@ -1,0 +1,22 @@
+{
+  "name": "DIF Attendance System",
+  "short_name": "DIF Attendance",
+  "start_url": "https://attendance.great-site.net/DIF%20Attendence%20System/index.php",
+  "scope": "https://attendance.great-site.net/DIF%20Attendence%20System/index.php",
+  "display": "standalone",
+  "background_color": "#0F54AE",
+  "theme_color": "#0F54AE",
+  "description": "Attendance management system for DIF.",
+  "icons": [
+    {
+  "src": "/icons/dif_logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/dif_logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
