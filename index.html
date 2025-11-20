@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -19,6 +20,7 @@
       justify-content: center;
       height: 100vh;
     }
+
     .center-container {
       display: flex;
       align-items: center;
@@ -27,17 +29,19 @@
       height: 100vh;
       min-height: 100vh;
     }
+
     .card {
       background: #ffffff;
       padding: 32px 28px 28px 28px;
       border-radius: 16px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
       text-align: center;
       max-width: 370px;
       width: 100%;
       position: relative;
       border: 1px solid #f3f4f6;
     }
+
     .logo {
       width: 60px;
       height: 60px;
@@ -48,6 +52,7 @@
       box-shadow: none;
       border: 1px solid #f3f4f6;
     }
+
     h2 {
       font-size: 1.6rem;
       margin-bottom: 10px;
@@ -55,12 +60,14 @@
       font-weight: 600;
       letter-spacing: 0.5px;
     }
+
     p {
       color: #475569;
       font-size: 1rem;
       margin-bottom: 20px;
       line-height: 1.6;
     }
+
     button {
       padding: 11px 20px;
       border-radius: 8px;
@@ -72,22 +79,27 @@
       cursor: pointer;
       margin: 10px 6px;
       transition: background 0.2s;
-      box-shadow: 0 2px 8px rgba(37,99,235,0.07);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.07);
     }
+
     button:hover {
       background: #1d4ed8;
     }
+
     button.secondary {
       background: #f3f4f6;
       color: #2563eb;
       border: 1px solid #e0e7ef;
     }
+
     button.secondary:hover {
       background: #e0e7ef;
     }
+
     #installBtn {
       display: none;
     }
+
     #status {
       display: none;
       margin-top: 18px;
@@ -96,7 +108,7 @@
       border-radius: 8px;
       background: #f9fafb;
       color: #2563eb;
-      box-shadow: 0 2px 8px rgba(37,99,235,0.07);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.07);
       font-weight: 500;
       transition: opacity 0.3s;
       text-align: center;
@@ -106,26 +118,35 @@
     }
   </style>
 </head>
+
 <body>
   <div class="center-container">
     <div class="card">
-    <img src="icons/dif_logo.png" alt="App Logo" class="logo" />
-    <h2><b>DIF Attendance Application</b></h2>
-  <p style="color:#64748b;font-size:0.98rem;margin-bottom:18px;">If the <b>Install App</b> button is not visible, it means your browser or device does not support installing this app as a PWA.</p>
-    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;gap:12px;">
-      <button id="installBtn">Install App</button>
-      <button id="openBtn" style="display:flex;align-items:center;gap:8px;padding:12px 24px;font-size:1.08rem;font-weight:500;background:#2563eb;color:#fff;border:none;border-radius:8px;box-shadow:0 2px 8px rgba(37,99,235,0.07);transition:background 0.2s;cursor:pointer;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" viewBox="0 0 24 24" style="vertical-align:middle;"><path d="M14 3v2h3.59L7 15.59 8.41 17 19 6.41V10h2V3z"/><path d="M5 5v14h14v-7h-2v5H7V7h5V5z" opacity=".3"/></svg>
-        <span style="font-weight:600;letter-spacing:0.5px;">Open Attendance System</span>
-      </button>
-    </div>
-    <p id="status"></p>
-    <div style="margin-top:28px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:1rem;color:#07387e;letter-spacing:1px;">
-      <span style="font-weight:500;">Powered By:</span>
-      <a href="https://ardevelopers.vercel.app" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:6px;">
-        <span style="color:#2563eb;font-weight:600;">AR Developers</span>
-      </a>
-    </div>
+      <img src="icons/dif_logo.png" alt="App Logo" class="logo" />
+      <h2><b>DIF Attendance Application</b></h2>
+      <p style="color:#64748b;font-size:0.98rem;margin-bottom:18px;">If the <b>Install App</b> button is not visible, it
+        means your browser or device does not support installing this app as a PWA.</p>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;gap:12px;">
+        <button id="installBtn">Install App</button>
+        <button id="openBtn"
+          style="display:flex;align-items:center;gap:8px;padding:12px 24px;font-size:1.08rem;font-weight:500;background:#2563eb;color:#fff;border:none;border-radius:8px;box-shadow:0 2px 8px rgba(37,99,235,0.07);transition:background 0.2s;cursor:pointer;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" viewBox="0 0 24 24"
+            style="vertical-align:middle;">
+            <path d="M14 3v2h3.59L7 15.59 8.41 17 19 6.41V10h2V3z" />
+            <path d="M5 5v14h14v-7h-2v5H7V7h5V5z" opacity=".3" />
+          </svg>
+          <span style="font-weight:600;letter-spacing:0.5px;">Open Attendance System</span>
+        </button>
+      </div>
+      <p id="status"></p>
+      <div
+        style="margin-top:28px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:1rem;color:#07387e;letter-spacing:1px;">
+        <span style="font-weight:500;">Powered By:</span>
+        <a href="https://ardevelopers.vercel.app" target="_blank"
+          style="text-decoration:none;display:flex;align-items:center;gap:6px;">
+          <span style="color:#2563eb;font-weight:600;">AR Developers</span>
+        </a>
+      </div>
     </div>
   </div>
 
@@ -135,7 +156,7 @@
     const status = document.getElementById('status');
 
     // InfinityFree backend URL (change to your domain)
-    const BACKEND_URL = 'https://attendance.great-site.net/DIF%20Attendence%20System/index.php';
+    const BACKEND_URL = 'https://www.google.com';
 
     // Register service worker
     if ('serviceWorker' in navigator) {
@@ -150,11 +171,11 @@
       e.preventDefault();
       deferredPrompt = e;
       installBtn.style.display = 'inline-block';
-  status.textContent = 'APP Supported 👍';
-  status.style.display = 'block';
-  status.style.background = '#23233a';
-  status.style.color = '#facc15';
-  status.style.opacity = '1';
+      status.textContent = 'APP Supported 👍';
+      status.style.display = 'block';
+      status.style.background = '#23233a';
+      status.style.color = '#facc15';
+      status.style.opacity = '1';
     });
 
     installBtn.addEventListener('click', async () => {
@@ -162,17 +183,17 @@
       deferredPrompt.prompt();
       const choice = await deferredPrompt.userChoice;
       if (choice.outcome === 'accepted') {
-    status.textContent = 'App installed 👍';
-    status.style.display = 'block';
-    status.style.background = '#23233a';
-    status.style.color = '#38bdf8';
-    status.style.opacity = '1';
+        status.textContent = 'App installed 👍';
+        status.style.display = 'block';
+        status.style.background = '#23233a';
+        status.style.color = '#38bdf8';
+        status.style.opacity = '1';
       } else {
-    status.textContent = 'Install dismissed';
-    status.style.display = 'block';
-    status.style.background = '#23233a';
-    status.style.color = '#f87171';
-    status.style.opacity = '1';
+        status.textContent = 'Install dismissed';
+        status.style.display = 'block';
+        status.style.background = '#23233a';
+        status.style.color = '#f87171';
+        status.style.opacity = '1';
       }
       deferredPrompt = null;
       installBtn.style.display = 'none';
@@ -196,4 +217,5 @@
     }
   </script>
 </body>
+
 </html>
