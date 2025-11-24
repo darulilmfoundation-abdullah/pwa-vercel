@@ -137,6 +137,9 @@
           </svg>
           <span style="font-weight:600;letter-spacing:0.5px;">Open Attendance System</span>
         </button>
+        <button id="clearCacheBtn" class="secondary" style="margin-top: 8px;">
+          Clear Cache & Reload
+        </button>
       </div>
       <p id="status"></p>
       <div
@@ -153,16 +156,38 @@
   <script>
     const installBtn = document.getElementById('installBtn');
     const openBtn = document.getElementById('openBtn');
+    const clearCacheBtn = document.getElementById('clearCacheBtn');
     const status = document.getElementById('status');
 
     // InfinityFree backend URL (change to your domain)
-    const BACKEND_URL = 'https://www.google.com';
+    const BACKEND_URL = 'https://attendance.great-site.net/DIF%20Attendence%20System/index.php';
 
     // Register service worker
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('✅ Service Worker Registered'))
-        .catch(e => console.error('SW register failed', e));
+      navigator.serviceWorker.register('service-worker.js').then(registration => {
+        console.log('✅ Service Worker Registered');
+
+        // Check for updates
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // New version available, notify user or auto-reload
+              console.log('New version available');
+              status.textContent = 'Updating App...';
+              status.style.display = 'block';
+            }
+          });
+        });
+      }).catch(e => console.error('SW register failed', e));
+
+      // Auto-reload when new SW takes control
+      let refreshing;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        window.location.reload();
+        refreshing = true;
+      });
     }
 
     // Show install button when beforeinstallprompt fires
@@ -203,6 +228,28 @@
     openBtn.addEventListener('click', () => {
       window.location.href = BACKEND_URL;
     });
+
+    // Manual Cache Clear
+    if (clearCacheBtn) {
+      clearCacheBtn.addEventListener('click', () => {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(registrations => {
+            for (let registration of registrations) {
+              registration.unregister();
+            }
+          });
+          caches.keys().then(names => {
+            for (let name of names) {
+              caches.delete(name);
+            }
+          }).then(() => {
+            window.location.reload();
+          });
+        } else {
+          window.location.reload();
+        }
+      });
+    }
 
     // If the page is running as an installed PWA (standalone), redirect automatically to backend
     function isInStandaloneMode() {
