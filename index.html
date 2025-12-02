@@ -342,7 +342,7 @@
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
-          Verify & Enter
+          Verify &amp; Enter
         </button>
 
         <button id="installBtn">
@@ -395,7 +395,7 @@
         </svg>
       </div>
       <h3 class="modal-title">Subscription Expired</h3>
-      <p class="modal-text">Your subscription has expired. Please purchase a first subscription to continue using the
+      <p class="modal-text">Your subscription has expired. Please purchase a subscription to continue using the
         application.</p>
       <button onclick="window.location.reload()" class="btn-primary">Try Again</button>
     </div>
@@ -506,42 +506,117 @@
             }, 1000);
           });
         } else {
-          authError.textContent = 'Please enter a code';
-          authError.style.display = 'block';
-          return;
+          window.location.reload();
         }
-        authError.style.display = 'none';
-        validateAndRedirect(code);
       });
+    }
 
-      // If the page is running as an installed PWA (standalone), redirect automatically to backend
-      function isInStandaloneMode() {
-        return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
-      }
+    // Token Validation Logic
+    async function validateAndRedirect(code) {
+      status.textContent = 'Verifying Subscription...';
+      status.style.display = 'block';
+      status.style.color = '#2563eb';
+      status.style.background = '#eff6ff';
 
-      // DEBUG: Run this logic even in browser for testing
-      // if (isInStandaloneMode()) {
-      // Check for stored code
-      const storedCode = localStorage.getItem('institute_code');
+      try {
+        // PRODUCTION MODE: Real API Call
+        const response = await fetch(`${VALIDATE_API}?code=${code}`);
 
-      if (storedCode) {
-        // Validate stored code
-        validateAndRedirect(storedCode);
-      } else {
-        // No code found, show input
-        status.textContent = 'Authentication Required';
-        status.style.display = 'block';
+        // Check HTTP status first
+        if (!response.ok) {
+          throw new Error(`Server Error: ${response.status} ${response.statusText}`);
+        }
 
-        authSection.style.display = 'block';
-        verifyBtn.style.display = 'flex';
-        openBtn.style.display = 'none'; // Hide the direct open button
+        const responseText = await response.text(); // Get raw text first
+        console.log('API Response:', responseText.substring(0, 200)); // Log preview
 
-        // Only hide install button if actually in standalone
-        if (isInStandaloneMode()) {
-          installBtn.style.display = 'none';
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (e) {
+          console.error("Failed to parse JSON. Raw Response:", responseText);
+          // More informative error
+          throw new Error('Server returned invalid response (expected JSON, got HTML/text)');
+        }
+
+        if (data.status === 'valid') {
+          localStorage.setItem('institute_code', code);
+          status.textContent = 'Access Granted. Redirecting...';
+          status.style.color = '#16a34a';
+          status.style.background = '#f0fdf4';
+          setTimeout(() => {
+            window.location.replace(BACKEND_URL);
+          }, 1000);
+        } else if (data.status === 'error') {
+          throw new Error(data.message); // Server returned an error message
+        } else {
+          // If explicitly invalid/expired
+          throw new Error('Expired');
+        }
+      } catch (error) {
+        console.error(error);
+        status.style.display = 'none';
+
+        if (error.message === 'Expired' || error.message === 'Invalid Code') {
+          // Show Expiration Modal
+          expireModal.style.display = 'flex';
+        } else {
+          // Network error or other issue
+          authError.style.display = 'block';
+
+          let msg = error.message;
+          if (msg.includes('Failed to fetch')) {
+            msg = 'Connection Error: Could not reach server.';
+          }
+          // If it's the JSON error, it will show a more informative message
+
+          authError.textContent = msg;
+          authSection.style.display = 'block';
+          verifyBtn.style.display = 'flex';
         }
       }
     }
+
+    // Handle Verify Button Click
+    verifyBtn.addEventListener('click', () => {
+      const code = instituteCodeInput.value.trim();
+      if (!code) {
+        authError.textContent = 'Please enter a code';
+        authError.style.display = 'block';
+        return;
+      }
+      authError.style.display = 'none';
+      validateAndRedirect(code);
+    });
+
+    // If the page is running as an installed PWA (standalone), redirect automatically to backend
+    function isInStandaloneMode() {
+      return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+    }
+
+    // DEBUG: Run this logic even in browser for testing
+    // if (isInStandaloneMode()) {
+    // Check for stored code
+    const storedCode = localStorage.getItem('institute_code');
+
+    if (storedCode) {
+      // Validate stored code
+      validateAndRedirect(storedCode);
+    } else {
+      // No code found, show input
+      status.textContent = 'Authentication Required';
+      status.style.display = 'block';
+
+      authSection.style.display = 'block';
+      verifyBtn.style.display = 'flex';
+      openBtn.style.display = 'none'; // Hide the direct open button
+
+      // Only hide install button if actually in standalone
+      if (isInStandaloneMode()) {
+        installBtn.style.display = 'none';
+      }
+    }
+    // }
   </script>
 </body>
 
