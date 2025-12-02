@@ -16,10 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Database Connection Details
-$servername = " sql212.infinityfree.com "; // CHANGE THIS
+$servername = "sql212.infinityfree.com"; // CHANGE THIS
 $username = "if0_37827467";             // CHANGE THIS
 $password = "abdullahrajab";                 // CHANGE THIS
-$dbname = " if0_37827467_dif_payments_database";    // CHANGE THIS
+$dbname = "if0_37827467_dif_payments_database";    // CHANGE THIS
 
 // Create connection (suppress warnings with @)
 $conn = @new mysqli($servername, $username, $password, $dbname);

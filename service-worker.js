@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-shell-v7';
+const CACHE_NAME = 'pwa-shell-v8';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -30,7 +30,15 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request).then(cachedResp => {
       if (cachedResp) return cachedResp;
-      return fetch(event.request).catch(() => caches.match('/index.html'));
+      return fetch(event.request).catch(() => {
+        // Only return index.html fallback for navigation requests (page loads)
+        // NOT for API calls or assets
+        if (event.request.mode === 'navigate') {
+          return caches.match('/index.html');
+        }
+        // For API calls, let the error propagate
+        throw new Error('Network request failed');
+      });
     })
   );
 });
