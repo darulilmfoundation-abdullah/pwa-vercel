@@ -3,37 +3,36 @@
 error_reporting(0);
 ini_set('display_errors', 0);
 
-// Allow CORS from any origin (since PWA might run from anywhere)
+// Allow CORS
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Content-Type: application/json; charset=UTF-8");
 
-// Handle preflight requests
+// Handle preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
 // Database Connection Details
-$servername = "sql123.infinityfree.com"; // CHANGE THIS
-$username = "if0_12345678";             // CHANGE THIS
-$password = "password";                 // CHANGE THIS
-$dbname = "if0_12345678_attendance";    // CHANGE THIS
+$servername = " sql212.infinityfree.com "; // CHANGE THIS
+$username = "if0_37827467";             // CHANGE THIS
+$password = "abdullahrajab";                 // CHANGE THIS
+$dbname = " if0_37827467_dif_payments_database";    // CHANGE THIS
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Create connection (suppress warnings with @)
+$conn = @new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
 if ($conn->connect_error) {
-    http_response_code(500);
-    echo json_encode(["status" => "error", "message" => "Database connection failed"]);
+    // Return 200 to ensure frontend sees the JSON, but with error status
+    echo json_encode(["status" => "error", "message" => "DB Connection Failed: " . $conn->connect_error]);
     exit();
 }
 
-// Get the code from the request
+// Get the code
 if (!isset($_GET['code'])) {
-    http_response_code(400);
     echo json_encode(["status" => "error", "message" => "No code provided"]);
     exit();
 }
@@ -47,10 +46,8 @@ $result = $conn->query($sql);
 if ($result && $result->num_rows > 0) {
     echo json_encode(["status" => "valid", "message" => "Access Granted"]);
 } else {
-    // Return 200 even for invalid code so frontend can parse JSON easily, 
-    // but with status 'invalid'
     echo json_encode(["status" => "invalid", "message" => "Invalid or Expired Code"]);
 }
 
 $conn->close();
-?>
+// No closing PHP tag to avoid trailing whitespace
