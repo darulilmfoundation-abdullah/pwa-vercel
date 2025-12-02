@@ -221,8 +221,7 @@
       width: 100%;
       margin-bottom: 20px;
       text-align: left;
-      display: none;
-      /* Hidden by default */
+      display: none; /* Hidden by default */
     }
 
     .input-label {
@@ -283,15 +282,8 @@
     }
 
     @keyframes modalPop {
-      from {
-        transform: scale(0.9);
-        opacity: 0;
-      }
-
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
     .modal-icon {
@@ -337,11 +329,7 @@
 
       <div class="btn-group">
         <button id="verifyBtn" class="btn-primary" style="display: none;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
           Verify & Enter
         </button>
 
@@ -387,16 +375,10 @@
   <div id="expireModal" class="modal-overlay">
     <div class="modal-content">
       <div class="modal-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
-        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
       </div>
       <h3 class="modal-title">Subscription Expired</h3>
-      <p class="modal-text">Your subscription has expired. Please purchase a first subscription to continue using the
-        application.</p>
+      <p class="modal-text">Your subscription has expired. Please purchase a first subscription to continue using the application.</p>
       <button onclick="window.location.reload()" class="btn-primary">Try Again</button>
     </div>
   </div>
@@ -415,7 +397,7 @@
     // InfinityFree backend URL (change to your domain)
     const BACKEND_URL = 'https://attendance.great-site.net/DIF%20Attendence%20System/index.php';
     // API Endpoint for Validation (Change this to your actual path)
-    const VALIDATE_API = 'https://attendance.great-site.net/DIF%20Attendence%20System/validate_institute.php';
+    const VALIDATE_API = 'https://attendance.great-site.net/DIF%20Attendence%20System/validate_institute.php'; 
 
     // Register service worker
     if ('serviceWorker' in navigator) {
@@ -521,6 +503,12 @@
       try {
         // PRODUCTION MODE: Real API Call
         const response = await fetch(`${VALIDATE_API}?code=${code}`);
+        
+        // Check if response is okay
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+
         const data = await response.json();
 
         if (data.status === 'valid') {
@@ -538,16 +526,24 @@
       } catch (error) {
         console.error(error);
         status.style.display = 'none';
-
+        
         if (error.message === 'Expired' || error.message === 'Invalid Code') {
-          // Show Expiration Modal
-          expireModal.style.display = 'flex';
+            // Show Expiration Modal
+            expireModal.style.display = 'flex';
         } else {
-          // Network error or other issue
-          authError.style.display = 'block';
-          authError.textContent = 'Connection failed. Please check internet.';
-          authSection.style.display = 'block';
-          verifyBtn.style.display = 'flex';
+            // Network error or other issue
+            authError.style.display = 'block';
+            
+            let msg = error.message;
+            if (msg.includes('Unexpected token')) {
+                msg = 'Server Error: Invalid JSON response. Check backend.';
+            } else if (msg.includes('Failed to fetch')) {
+                msg = 'Connection Error: Could not reach server.';
+            }
+            
+            authError.textContent = msg;
+            authSection.style.display = 'block';
+            verifyBtn.style.display = 'flex';
         }
       }
     }
@@ -569,10 +565,11 @@
       return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
     }
 
-    if (isInStandaloneMode()) {
+    // DEBUG: Run this logic even in browser for testing
+    // if (isInStandaloneMode()) {
       // Check for stored code
       const storedCode = localStorage.getItem('institute_code');
-
+      
       if (storedCode) {
         // Validate stored code
         validateAndRedirect(storedCode);
@@ -580,13 +577,17 @@
         // No code found, show input
         status.textContent = 'Authentication Required';
         status.style.display = 'block';
-
+        
         authSection.style.display = 'block';
         verifyBtn.style.display = 'flex';
         openBtn.style.display = 'none'; // Hide the direct open button
-        installBtn.style.display = 'none'; // Hide install button in standalone
+        
+        // Only hide install button if actually in standalone
+        if (isInStandaloneMode()) {
+            installBtn.style.display = 'none'; 
+        }
       }
-    }
+    // }
   </script>
 </body>
 
