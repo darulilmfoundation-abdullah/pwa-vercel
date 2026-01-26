@@ -1,8 +1,12 @@
-const CACHE_NAME = 'ar-ams-v5';
+const CACHE_NAME = 'ar-ams-v5.1.0';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/manifest.json'
+  '/manifest.json',
+  '/icons/96 x 96.png',
+  '/icons/192 x 192.png',
+  '/icons/256 x 256.png',
+  '/icons/512 x 512.png'
 ];
 
 self.addEventListener('install', event => {
