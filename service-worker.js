@@ -16,6 +16,7 @@ const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/versions.json',
   '/service-worker.js',
   '/attendance-verification-popup.js',
   '/report-problem.js',
