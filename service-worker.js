@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ar-ams-v5.1.0';
+const CACHE_NAME = 'ar-ams-v5.2.0';
 const urlsToCache = [
   '/',
   '/index.html',
