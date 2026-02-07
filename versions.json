@@ -1,7 +1,10 @@
 {
-    "version": 5.2,
-    "builds": [
-        { "src": "index.html", "use": "@vercel/static" }
+    "version": "5.2.0",
+    "lastUpdated": "2026-02-07T00:00:00Z",
+    "features": [
+        "Attendance Verification Popup",
+        "Report Problem Feature",
+        "Improved Update Check"
     ]
 }
 
