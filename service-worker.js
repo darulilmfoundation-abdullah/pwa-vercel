@@ -6,11 +6,11 @@ const getCacheVersion = async () => {
     return `ar-ams-v${data.version}`;
   } catch (e) {
     console.error('Could not fetch version:', e);
-    return 'ar-ams-v5.2.0';
+    return 'ar-ams-v5.3.0';
   }
 };
 
-let CACHE_NAME = 'ar-ams-v5.2.0';
+let CACHE_NAME = 'ar-ams-v5.3.0';
 
 const urlsToCache = [
   '/',
@@ -18,7 +18,7 @@ const urlsToCache = [
   '/manifest.json',
   '/versions.json',
   '/service-worker.js',
-  '/attendance-verification-popup.js',
+  // '/attendance-verification-popup.js',
   '/report-problem.js',
   '/icons/96 x 96.png',
   '/icons/192 x 192.png',
